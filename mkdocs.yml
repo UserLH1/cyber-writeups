@@ -1,0 +1,41 @@
+site_name: My CTF Writeups
+site_url: https://UserLH1.github.io/cyber-writeups/
+theme:
+  name: material
+  palette:
+    # Schimbare automată Dark/Light mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Forensics: Forensics.md
+  - Web Security: Web_Security.md
+  - Reverse Engineering: Reverse_Engineering.md
+  - Blockchain & Crypto: Blockchain_Crypto.md
+  - Misc & Network: Misc_Network.md
