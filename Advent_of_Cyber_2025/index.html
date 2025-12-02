@@ -8,10 +8,8 @@
       
       
       
-        <link rel="canonical" href="https://UserLH1.github.io/cyber-writeups/Misc_Network/">
+        <link rel="canonical" href="https://UserLH1.github.io/cyber-writeups/Advent_of_Cyber_2025/">
       
-      
-        <link rel="prev" href="../Blockchain_Crypto/">
       
       
       
@@ -23,7 +21,7 @@
     
     
       
-        <title>Misc & Network - My CTF Writeups</title>
+        <title>Advent of Cyber 2025 - TryHackMe - My CTF Writeups</title>
       
     
     
@@ -74,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#misc-network-write-ups" class="md-skip">
+        <a href="#advent-of-cyber-2025-tryhackme" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Misc & Network
+              Advent of Cyber 2025 - TryHackMe
             
           </span>
         </div>
@@ -312,11 +310,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../Misc_Network/" class="md-tabs__link">
         
   
   
@@ -501,37 +497,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Misc & Network
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../Misc_Network/" class="md-nav__link">
         
   
   
@@ -547,48 +516,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-100-notes-later" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 100 Notes Later
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-online-encryption" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Online Encryption
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -620,10 +547,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-100-notes-later" class="md-nav__link">
+  <a href="#introduction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 100 Notes Later
+        Introduction
       
     </span>
   </a>
@@ -631,13 +558,74 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-online-encryption" class="md-nav__link">
+  <a href="#day-1-linux-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Online Encryption
+        Day 1: Linux Commands
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Day 1: Linux Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hidden-files-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hidden Files Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#investigating-the-compromised-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigating the Compromised User
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-investigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Investigation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-history-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command History Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -658,41 +646,30 @@
 
 
 
-<h1 id="misc-network-write-ups">Misc &amp; Network Write-ups</h1>
-<h2 id="1-100-notes-later">1. 100 Notes Later</h2>
-<p><strong>Task:</strong> Connect to a music service.</p>
-<p><strong>Solution:</strong></p>
-<p>The challenge provided a netcat command: <code>nc 91.99.1.179 60001</code>.</p>
-<ol>
-<li>
-<p>Attempted to redirect output to a file:</p>
-<p><code>bash
-nc 91.99.1.179 60001 &gt; music.mp3</code></p>
-</li>
-<li>
-<p><strong>Obstacle:</strong> The connection timed out.</p>
-</li>
-<li>
-<p><strong>Diagnosis:</strong> The high port (60001) was blocked by my local network firewall.</p>
-</li>
-<li>
-<p><strong>Fix:</strong> Switched to a mobile hotspot (cellular data) to bypass the restriction.</p>
-</li>
-</ol>
-<p><strong>Status:</strong> Still experiencing connection issues, likely due to server-side problems.</p>
-<h2 id="2-online-encryption">2. Online Encryption</h2>
-<p><strong>Challenge:</strong> Analyze a PCAP file related to an insecure "online encryption" service.</p>
-<p><strong>Solution:</strong>
-The challenge description warned against trusting online encryption.
-1.  <strong>Traffic Analysis:</strong> Opened the <code>.pcap</code> file in <strong>Wireshark</strong>.
-2.  <strong>Filtering:</strong> Applied the filter <code>http.request.method == POST</code> to inspect data submitted by the user. Since the protocol was HTTP (not HTTPS), all form data was visible in plaintext.
-3.  <strong>False Leads:</strong> I observed multiple requests to an AES encryption endpoint. I initially tried to manually reproduce the encryption using the keys found in the packets (e.g., "here it is man"). However, the key lengths (14 or 19 characters) were invalid for AES-128, which strictly requires 16 characters. This indicated that re-encrypting was not the solution.
-4.  <strong>Discovery:</strong> I found a specific packet where the <code>input</code> field contained a Base64 string (identifiable by the <code>==</code> padding at the end).
-5.  <strong>Decoding:</strong>
-    - <strong>Base64:</strong> Decoded the string to reveal: <code>RPFP{qq545sos12sq608qnn8p2....}</code>.
-    - <strong>Crypto Analysis:</strong> The prefix <code>RPFP</code> seemed like a shifted version of the expected flag format.
-    - <strong>ROT13:</strong> Applied a Caesar Cipher (ROT13) shift, which successfully decrypted the flag.</p>
-<p><strong>Flag:</strong> <code>ECSC{dd545fbf12fd608daa8c2...}</code></p>
+<h1 id="advent-of-cyber-2025-tryhackme">Advent of Cyber 2025 - TryHackMe</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Basic Linux commands overview with Windows equivalents:</p>
+<ul>
+<li><code>dir /a</code> (Windows) = <code>ls -a</code> (Linux) - List all files including hidden</li>
+<li><code>type file</code> (Windows) = <code>cat file</code> (Linux) - Display file contents</li>
+</ul>
+<hr />
+<h2 id="day-1-linux-commands">Day 1: Linux Commands</h2>
+<h3 id="hidden-files-discovery">Hidden Files Discovery</h3>
+<p>We learned about hidden files on Linux and viewing them using <code>ls -a</code>, then <code>cat .file.txt</code> to find the first flag.</p>
+<h3 id="log-analysis">Log Analysis</h3>
+<p><strong>Hint:</strong> Check <code>/var/log/</code> and grep inside, let the logs become your guide.</p>
+<p>The <code>/var/log/</code> folder is where all Linux system logs are stored. We attempted to find information about failed logins using the command <code>grep "failed login" auth.log</code>. No results. Then tried <code>grep "failed password"</code>. Still nothing, because grep is case-sensitive. Using <code>grep "Failed password"</code> returned a list of entries. Found a log of a user trying to connect as socmas:</p>
+<pre><code>2025-10-13T01:43:48.000724+00:00 tbfc-web01 sshd[1037]: Failed password for socmas from eggbox-196.hopsec.thm port 16212 ssh2
+</code></pre>
+<h3 id="investigating-the-compromised-user">Investigating the Compromised User</h3>
+<p>Since the user socmas exists, we need to check if they left any malware. Given the attacking machine's name is eggbox, we searched for the word "egg" using <code>find /home/socmas -name "*egg*"</code> and found the file <code>/home/socmas/2025/eggstrike.sh</code> - possible malware.</p>
+<p><strong>Script analysis:</strong> It reads the wishlist file, dumps it to <code>/tmp/dump.txt</code>, deletes it, then replaces it with "easmas.txt".</p>
+<h3 id="system-investigation">System Investigation</h3>
+<p>To view usernames and password hashes: <code>cat /etc/shadow</code></p>
+<p>To run all commands with sudo: <code>sudo su</code></p>
+<h3 id="command-history-analysis">Command History Analysis</h3>
+<p>Pressing the "up arrow" shows command history because all commands are saved in <code>/home/username/.bash_history</code>. We discovered that someone added an SSH key with <code>nano .ssh/authorized_keys</code>, then sent the <code>data.txt</code> file to an external server using <code>curl --data</code>.</p>
 
 
 

