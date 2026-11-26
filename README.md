@@ -2,11 +2,9 @@
 
 A comprehensive collection of Capture The Flag (CTF) challenge solutions documenting various cybersecurity techniques and methodologies.
 
-##  Overview
+## Overview
 
 This repository contains detailed write-ups for CTF challenges across multiple security domains, showcasing practical skills in exploitation, analysis, and problem-solving.
-
-
 
 ### Viewing Write-ups
 
@@ -23,6 +21,9 @@ mkdocs serve
 
 # Build static site
 mkdocs build
+
+# Publish to GitHub Pages (gh-pages branch)
+mkdocs gh-deploy
 ```
 
 Visit `http://localhost:8000` to browse the write-ups.
@@ -38,13 +39,12 @@ Visit `http://localhost:8000` to browse the write-ups.
 │   ├── Reverse_Engineering.md     # Binary analysis
 │   ├── Blockchain_Crypto.md       # Smart contracts & crypto
 │   └── Misc_Network.md            # Network & misc challenges
-├── site/                          # Generated static site
+├── site/                          # Local build output (Pages is served from gh-pages)
 ├── mkdocs.yml                     # MkDocs configuration
 └── README.md                      # This file
 ```
 
-
-##  Achievements
+## Achievements
 
 - **12+ Web Security** challenges solved
 - **4 Forensics** investigations completed
